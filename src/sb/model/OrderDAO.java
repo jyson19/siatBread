@@ -63,8 +63,6 @@ public class OrderDAO {
 			if (rset.next()) {
 
 				ord.put(rset.getString(1), rset.getInt(2));
-
-//				order = new OrderDTO(rset.getInt(1), rset.getInt(2), rset.getInt(3), rset.getInt(4), rset.getInt(5));
 			}
 		} finally {
 			BreadUtil.close(con, pstmt, rset);
@@ -111,7 +109,6 @@ public class OrderDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
-//		HashMap<Integer, Integer> qc = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 
 		try {
@@ -135,8 +132,6 @@ public class OrderDAO {
 		} finally {
 			BreadUtil.close(con, pstmt, rset);
 		}
-//		System.out.println(list.get(0));
-//		System.out.println(list.get(1));
 
 		if (list.size() == 2) {
 			return list;
@@ -154,8 +149,8 @@ public class OrderDAO {
 			con = BreadUtil.getConnection();
 			con.setAutoCommit(false); // 오토커밋 하지않음
 
-			pstmt = con.prepareStatement(
-					"select sum(quantity) from stock_in where bread_id = ? and exp_date >= SYSDATE and category = 1");
+			pstmt = con.prepareStatement("select sum(quantity) from stock_in "//
+					+ "where bread_id = ? and exp_date >= SYSDATE and category = 1");
 			pstmt.setInt(1, (int) list.get(1));
 
 			rset = pstmt.executeQuery();
@@ -168,7 +163,6 @@ public class OrderDAO {
 		}
 
 		if (list.size() == 3) {
-//			System.out.println(list.get(2));
 			return list;
 		}
 		return null;
@@ -178,17 +172,10 @@ public class OrderDAO {
 	public static boolean stockInRownum(List<Integer> list) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-
-//		Connection con2 = null;
 		PreparedStatement pstmt2 = null;
-
-//		Connection con3 = null;
 		PreparedStatement pstmt3 = null;
-
-//		Connection con4 = null;
 		PreparedStatement pstmt4 = null;
-//		ResultSet rset3 = null;
+		ResultSet rset = null;
 		int result = 0;
 
 		// list(int order_quan, int bread_id, int sum(quantity))
@@ -198,14 +185,9 @@ public class OrderDAO {
 		// list(int order_quan, int bread_id, int sum(quantity), null, null, null)
 		try {
 			con = BreadUtil.getConnection();
-//			con2 = BreadUtil.getConnection();
-//			con3 = BreadUtil.getConnection();
-//			con4 = BreadUtil.getConnection();
-//			con.setAutoCommit(false); // 오토커밋 하지않음
 
 			int rownum = 1;
 			int orderQuanNum = list.get(0);
-//			System.out.println("list.get(0) : " + orderQuanNum);
 			while (orderQuanNum != 0) {
 				pstmt = con.prepareStatement("select stock_id, quantity " //
 						+ "from (select stock_id, quantity, category, rownum as rn "//
@@ -214,7 +196,6 @@ public class OrderDAO {
 						+ "where a.rn = ?");
 				pstmt.setInt(1, list.get(1));
 				pstmt.setInt(2, rownum);
-//				System.out.println(rownum);
 				rownum++;
 
 				rset = pstmt.executeQuery();
@@ -223,14 +204,9 @@ public class OrderDAO {
 				if (rset.next()) {
 					list.set(3, rset.getInt(1));
 					list.set(4, rset.getInt(2));
-//					list.set(5, rset.getInt(3));
 				}
 				// list(int order_quan, int bread_id, int sum(quantity), int stock_id, int
 				// quantity, int rownum)
-
-//				System.out.println("quantity : " + list.get(4));
-//				System.out.println("order_quan : " + list.get(0));
-//				System.out.println("stock_id : " + list.get(3));
 
 				// stockIn 1개 객체 재고 >= 주문수량
 				if (list.get(4) >= orderQuanNum) {
@@ -253,28 +229,21 @@ public class OrderDAO {
 					list.set(4, list.get(4) - orderQuanNum);
 					orderQuanNum = 0;
 					list.set(0, orderQuanNum);
-//					System.out.println("orderQuanNum : " + orderQuanNum);
-
-//					System.out.println("pstmt3 stock_id2 : " + list.get(3));
 
 					pstmt3.executeUpdate();
-//					System.out.println("pstmt3");
 
 					// stockIn 1개 객체 재고 < 주문수량
 				} else if (list.get(4) < orderQuanNum) {
 					pstmt2 = con.prepareStatement("update stock_in set category = 2 where stock_id = ?");
 					pstmt2.setInt(1, list.get(3));
 					orderQuanNum = orderQuanNum - list.get(4);
-//					System.out.println("orderQuanNum : " + orderQuanNum);
 
 					pstmt2.executeUpdate();
 					result++;
 				}
 
-//				System.out.println("pstmt2");
 			}
 			if (orderQuanNum == 0) {
-				// 쿼리 추가
 				pstmt4 = con.prepareStatement("update order_req set sell_check = 2 "//
 						+ "where order_id = (select order_id "//
 						+ "from (select o.order_quan, o.bread_id, rownum, o.order_id "//
@@ -291,13 +260,10 @@ public class OrderDAO {
 		} finally {
 			con.close();
 			pstmt.close();
-			rset.close();
-//			con2.close();
 			pstmt2.close();
-//			con3.close();
 			pstmt3.close();
-//			con4.close();
 			pstmt4.close();
+			rset.close();
 		}
 		return false;
 	}

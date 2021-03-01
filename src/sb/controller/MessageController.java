@@ -14,16 +14,8 @@ public class MessageController {
 		return instance;
 	}
 
-	public void beginMenu() {
-		MessageView.beginMenu();
-	}
-
 	public void choiceAgain() {
 		FailView.failMessage("\n잘못된 입력값입니다.\n");
-	}
-
-	public void makeNewBread() {
-		MessageView.makeNewBread();
 	}
 
 	public void hasNextCustomer() {

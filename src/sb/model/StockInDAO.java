@@ -47,8 +47,8 @@ public class StockInDAO {
 		PreparedStatement pstmt = null;
 		try {
 			con = BreadUtil.getConnection();
-			pstmt = con
-					.prepareStatement("UPDATE stock_in SET out_date = SYSDATE, category = 4 WHERE exp_date < SYSDATE");
+			pstmt = con.prepareStatement("UPDATE stock_in SET out_date = SYSDATE, category = 4 "//
+					+ "WHERE exp_date < SYSDATE");
 
 			int result = pstmt.executeUpdate();
 			if (result >= 1) {
@@ -70,8 +70,8 @@ public class StockInDAO {
 			con = BreadUtil.getConnection();
 			con.setAutoCommit(false);
 
-			pstmt = con.prepareStatement(
-					"select s.stock_id, b.name, s.exp_date, s.quantity from stock_in s, bread b where s.bread_id = b.bread_id and s.category = 1");
+			pstmt = con.prepareStatement("select s.stock_id, b.name, s.exp_date, s.quantity "//
+					+ "from stock_in s, bread b where s.bread_id = b.bread_id and s.category = 1");
 			rset = pstmt.executeQuery();
 
 			list = new ArrayList<StockInQuantityView>();
@@ -95,8 +95,8 @@ public class StockInDAO {
 		ResultSet rset = null;
 		try {
 			con = BreadUtil.getConnection();
-			pstmt = con.prepareStatement("select sum(price*quantity) "
-					+ "from bread b, stock_in s "
+			pstmt = con.prepareStatement("select sum(price*quantity) " //
+					+ "from bread b, stock_in s " //
 					+ "where b.bread_id = s.bread_id and s.category in(3,4)");
 			rset = pstmt.executeQuery();
 
@@ -117,8 +117,8 @@ public class StockInDAO {
 		ResultSet rset = null;
 		try {
 			con = BreadUtil.getConnection();
-			pstmt = con.prepareStatement("select sum(price*quantity) "
-					+ "from bread b, stock_in s "
+			pstmt = con.prepareStatement("select sum(price*quantity) " //
+					+ "from bread b, stock_in s " //
 					+ "where b.bread_id = s.bread_id and s.category = 2");
 			rset = pstmt.executeQuery();
 

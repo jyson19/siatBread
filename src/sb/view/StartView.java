@@ -23,31 +23,30 @@ public class StartView {
 			e1.printStackTrace();
 		}
 
-
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			while (true) {
 				System.out.println("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-				System.out.println("     판교 전통 빵집 '씨빵'입니다.");
+				System.out.println("\n     판교 전통 빵집 '씨빵'입니다.");
 				System.out.println("           1. 빵 연구소 방문");
 				System.out.println("           2. 재고 조회");
 				System.out.println("           3. 제품 검색(키워드)");
 				System.out.println("           4. 폐기 처리");
 				System.out.println("           5. 가게 OPEN");
 				System.out.println("           6. 매출 장부 조회");
-				System.out.println("           7. 퇴근하기");
+				System.out.println("           7. 퇴근하기\n");
 				System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 				System.out.printf("\n무엇을 하시겠습니까 ? : ");
 				int choice = Integer.parseInt(br.readLine());
 				if (choice == 1) {
 					while (true) {
 						System.out.println("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-						System.out.println("      SB 리서치 연구소 입니다.");
+						System.out.println("\n      SB 리서치 연구소 입니다.");
 						System.out.println("           1. 신제품 등록");
 						System.out.println("           2. 제품 변경");
 						System.out.println("           3. 등록 취소");
 						System.out.println("           4. 전체 제품 조회");
-						System.out.println("           5. 나가기");
+						System.out.println("           5. 나가기\n");
 						System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 						System.out.printf("\n무엇을 하시겠습니까 ? : ");
 						int choice3 = Integer.parseInt(br.readLine());
@@ -76,9 +75,9 @@ public class StartView {
 								System.out.println("\n아래 제품 검색 기능을 활용하여");
 								System.out.println("원하고자 하는 제품의 번호를 조회할 수 있습니다.");
 								System.out.println("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-								System.out.println("           1. 제품 검색(키워드)");
+								System.out.println("\n           1. 제품 검색(키워드)");
 								System.out.println("           2. 등록 취소(번호)");
-								System.out.println("           3. 뒤로가기");
+								System.out.println("           3. 뒤로가기\n");
 								System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 								System.out.printf("\n무엇을 하시겠습니까 ? : ");
 								int choice4 = Integer.parseInt(br.readLine());
@@ -127,11 +126,11 @@ public class StartView {
 								boolean flag2 = true;
 								while (flag2) {
 									System.out.println("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-									System.out.println("           1. 주문 조회");
+									System.out.println("\n           1. 주문 조회");
 									System.out.println("           2. 빵 제작");
 									System.out.println("           3. 주문 판매 처리");
 									System.out.println("           4. 손님 마감");
-									System.out.println("           5. 가게 CLOSE");
+									System.out.println("           5. 가게 CLOSE\n");
 									System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 									System.out.printf("\n무엇을 하시겠습니까? : ");
 									int choice2 = Integer.parseInt(br.readLine());
@@ -183,8 +182,10 @@ public class StartView {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
 			mCtroller.choiceAgain();
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		// 나중에(CustomerDTO 완성 이후)
 		// (미구현)매출 top3 상품 조회
@@ -196,7 +197,9 @@ public class StartView {
 class Intro implements Runnable {
 	public Intro() {
 	}
+
 	SiatBreadController ctroller = SiatBreadController.getInstance();
+
 	@Override
 	public synchronized void run() {
 		try {
@@ -251,7 +254,7 @@ class OrderThread implements Runnable {
 //			"\n\n", //
 //			"\n\n", //
 //			"\n\n", //
-			"\ntip. SK는 국내 최고 기업입니다.\n" };
+			"\n ▶ SK는 국내 최고의 기업입니다.\n" };
 
 	@Override
 	public synchronized void run() {

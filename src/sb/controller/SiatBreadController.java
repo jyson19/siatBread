@@ -68,13 +68,13 @@ public class SiatBreadController {
 			BreadDTO bread = service.getBreadId(breadId);
 			if (bread != null) {
 				service.breadUpdate(bread.getBreadId(), breadName, expDate, price);
-				SuccessView.result("변경이 완료되었습니다.");
+				SuccessView.result("\n변경이 완료되었습니다.\n");
 			} else {
-				FailView.failMessage("변경하고자하는 대상이 없습니다.");
+				FailView.failMessage("\n변경하고자하는 대상이 없습니다.\n");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			FailView.failMessage("변경 실패..!");
+			FailView.failMessage("\n변경 실패..!\n");
 		}
 	}
 
@@ -82,9 +82,9 @@ public class SiatBreadController {
 	public void deleteBread(int breadId) {
 		try {
 			if (service.deleteBreadId(breadId) == true) {
-				SuccessView.result("해당 제품의 데이터가 삭제되었습니다.");
+				SuccessView.result("\n해당 제품의 데이터가 삭제되었습니다.\n");
 			} else {
-				FailView.failMessage("해당 제품이 없거나 잘못된 입력 값입니다.");
+				FailView.failMessage("\n해당 제품이 없거나 잘못된 입력 값입니다.\n");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -95,10 +95,10 @@ public class SiatBreadController {
 	public void createBread(String breadName) {
 		try {
 			service.fromStockin(breadName);
-			SuccessView.result("\n제작 성공 !\n");
+			SuccessView.result("\n뜨끈~하고 든든~한 신선한 빵이 나왔습니다!\n");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			FailView.failMessage("\n빵 제작에 실패하였습니다.\n");
+			FailView.failMessage("\n빵 제작에 실패하였습니다. 해당 비용은 추후 청구하도로..ㄱ..\n");
 		}
 	}
 
@@ -117,11 +117,15 @@ public class SiatBreadController {
 	// 빵 재고 조회
 	public void breadStockIn() {
 		try {
-			EndView.breadListView(service.breadStock());
-			SuccessView.result("재고 조회 결과 입니다.");
+			if (service.breadStock().size() != 0) {
+				EndView.breadListView(service.breadStock());
+				SuccessView.result("\n재고 조회 결과 입니다.\n");
+			} else {
+				SuccessView.result("\n음.. 텅비었네요.. ....  일 합시다.\n");
+			}
 		} catch (SQLException s) {
 			s.printStackTrace();
-			FailView.failMessage("재고 빵 조회 실패");
+			FailView.failMessage("\n있었는데요? 없습니다.. 아무튼 없습니다.\n");
 		}
 	}
 
@@ -145,7 +149,7 @@ public class SiatBreadController {
 	public void createOrder() {
 		try {
 			HashMap<String, Integer> orderList = service.orderCreate();
-			SuccessView.result("\n손님이 방문했습니다.");
+			SuccessView.result("\n손님이 방문했습니다.\n");
 			EndView.orderListView(orderList);
 
 		} catch (SQLException e) {
@@ -159,9 +163,9 @@ public class SiatBreadController {
 			if (service.orderSelect().size() != 0) {
 				EndView.orderSelectAll(service.orderSelect());
 //			service.orderSelect();
-				SuccessView.result("\n주문이 밀렸네요.. 어서 일합시다.");
+				SuccessView.result("\n주문이 밀렸네요.. 어서 일합시다.\n");
 			} else {
-				FailView.failMessage("\n손님이 안오시네요.. 주문이 안들어옵니다..");
+				FailView.failMessage("\n손님이 안오시네요.. 주문이 안들어옵니다..\n");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -171,14 +175,18 @@ public class SiatBreadController {
 	// 빵 판매
 	public boolean sellBread() {
 		try {
-			ArrayList<OrderView> list = service.orderSelect();
-			String bname = list.get(0).getName();
+			if (service.orderSelect().size() != 0) {
+				ArrayList<OrderView> list = service.orderSelect();
+				String bname = list.get(0).getName();
 
-			if (service.breadSell() == true) {
-				SuccessView.result("\n주문하신 『" + bname + "』 나왔습니다 !");
-				return true;
+				if (service.breadSell() == true) {
+					SuccessView.result("\n주문하신 『" + bname + "』 나왔습니다 !\n");
+					return true;
+				} else {
+					FailView.failMessage("\n해당 빵의 수량이 부족합니다.\n");
+				}
 			} else {
-				FailView.failMessage("\n해당 빵의 수량이 부족합니다.");
+				FailView.failMessage("\n장사가 안됩니다.. 지금 손님이 없네요..\n");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

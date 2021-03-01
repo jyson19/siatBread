@@ -2,14 +2,15 @@ package sb.dto;
 
 public class StockInQuantityView {
 
-	private int stockId;  
-	private String name; 
-	private String expDate; 
+	private int stockId;
+	private String name;
+	private String expDate;
 	private int quantity;
-	
+
 	public StockInQuantityView() {
 		super();
 	}
+
 	public StockInQuantityView(int stockId, String name, String expDate, int quantity) {
 		super();
 		this.stockId = stockId;
@@ -37,15 +38,19 @@ public class StockInQuantityView {
 	public String getExpDate() {
 		return expDate;
 	}
+
 	public void setExpDate(String expDate) {
 		this.expDate = expDate;
 	}
+
 	public int getQuantity() {
 		return quantity;
 	}
+
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+
 	@Override
 	public String toString() {
 //		return "재고량은  [재고빵 ID : " + stockId 
@@ -62,6 +67,6 @@ public class StockInQuantityView {
 		builder.append(", 수량 : ");
 		builder.append(quantity);
 		return builder.toString();
-	} 
+	}
 
 }

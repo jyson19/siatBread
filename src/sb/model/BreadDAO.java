@@ -75,7 +75,6 @@ public class BreadDAO {
 
 			pstmt = con.prepareStatement("select * from bread order by bread_id");
 			rset = pstmt.executeQuery();
-//			con.commit();
 
 			list = new ArrayList<BreadDTO>();
 			while (rset.next()) {
@@ -199,7 +198,6 @@ public class BreadDAO {
 			pstmt.setInt(4, breadId);
 			
 			int result = pstmt.executeUpdate();
-			System.out.println(result);
 			if (result == 1) {
 				return true;
 			}
