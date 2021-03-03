@@ -3,6 +3,8 @@ package sb.view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import sb.controller.MessageController;
 import sb.controller.SiatBreadController;
@@ -13,15 +15,16 @@ public class StartView {
 		SiatBreadController ctroller = SiatBreadController.getInstance();
 		MessageController mCtroller = MessageController.getInstance();
 
-		Thread thread = new Thread(new Intro());
-		thread.start();
-		try {
-			Thread.sleep(30000);
-			thread.isInterrupted();
-			thread.interrupt();
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
+//		Thread thread = new Thread(new Intro());
+//		thread.start();
+//		try {
+//			Thread.sleep(30000);
+//			thread.isInterrupted();
+//			thread.interrupt();
+//		} catch (InterruptedException e1) {
+//			e1.printStackTrace();
+//		}
+
 
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -116,59 +119,54 @@ public class StartView {
 					System.out.println("\n           O P E N !!");
 					System.out.println("           장사 시작합니다~!\n");
 					System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
-					boolean flag = true;
-					while (flag) {
-						Thread thread2 = new Thread(new OrderThread());
-						thread2.start();
-						synchronized (thread2) {
-							try {
-								thread2.wait();
-								boolean flag2 = true;
-								while (flag2) {
-									System.out.println("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-									System.out.println("\n           1. 주문 조회");
-									System.out.println("           2. 빵 제작");
-									System.out.println("           3. 주문 판매 처리");
-									System.out.println("           4. 손님 마감");
-									System.out.println("           5. 가게 CLOSE\n");
-									System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
-									System.out.printf("\n무엇을 하시겠습니까? : ");
-									int choice2 = Integer.parseInt(br.readLine());
-									if (choice2 == 1) {
-										ctroller.selectOrder();
-									} else if (choice2 == 2) {
-										System.out.printf("만드실 빵의 이름을 입력해주세요 : ");
-										String breadName = br.readLine();
-										ctroller.createBread(breadName);
-									} else if (choice2 == 3) {
-										if (ctroller.sellBread() == true) {
-											thread2.notify();
-										}
-									} else if (choice2 == 4) {
-										flag = false;
-										thread2.notify();
-										Thread.sleep(100);
-										thread2.interrupt();
-										mCtroller.workEnd();
-									} else if (choice2 == 5) {
-										// 주문 객체가 있으면 true
-										if (ctroller.orderCheck() == false) {
-											flag2 = false;
-										} else {
-											mCtroller.hasNextCustomer();
-											continue;
-										}
-									} else {
-										mCtroller.choiceAgain();
+					try {
+						ExecutorService executorService = Executors.newFixedThreadPool(3);
+						OrderThread ot = new OrderThread();
+						executorService.submit(ot);
+						boolean flag2 = true;
+						while (flag2) {
+							System.out.println("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+							System.out.println("\n           1. 주문 조회");
+							System.out.println("           2. 빵 제작");
+							System.out.println("           3. 주문 판매 처리");
+							System.out.println("           4. 손님 마감");
+							System.out.println("           5. 가게 CLOSE\n");
+							System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+							System.out.printf("\n무엇을 하시겠습니까? : ");
+							int choice2 = Integer.parseInt(br.readLine());
+							if (choice2 == 1) {
+								ctroller.selectOrder();
+							} else if (choice2 == 2) {
+								System.out.printf("만드실 빵의 이름을 입력해주세요 : ");
+								String breadName = br.readLine();
+								ctroller.createBread(breadName);
+							} else if (choice2 == 3) {
+								if (ctroller.sellBread() == true) {
+									if (executorService.isShutdown() != true) {
+										executorService.submit(ot);
 									}
 								}
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							} catch (IllegalThreadStateException e) {
-								e.printStackTrace();
+
+							} else if (choice2 == 4) {
+								// 스레드풀 종료
+								executorService.shutdown();
+								mCtroller.workEnd();
+							} else if (choice2 == 5) {
+								// 주문 객체가 있으면 true
+								if (ctroller.orderCheck() == false) {
+									flag2 = false;
+								} else {
+									mCtroller.hasNextCustomer();
+									continue;
+								}
+							} else {
+								mCtroller.choiceAgain();
 							}
 						}
+					} catch (IllegalThreadStateException e) {
+						e.printStackTrace();
 					}
+//					}
 				} else if (choice == 6) {
 					ctroller.saleBooks();
 				} else if (choice == 7) {
@@ -262,7 +260,10 @@ class OrderThread implements Runnable {
 		try {
 			// 10초 ~ 30초
 			// 10001 ~ 30000
-			int randomSec = (int) (Math.random() * 20000) + 10000;
+//			int randomSec = (int) (Math.random() * 20000) + 10000;
+			// 10초 ~ 30초
+			// 5001 ~ 10000
+			int randomSec = (int) (Math.random() * 5000) + 5000;
 			int randomMsg = (int) (Math.random() * 10);
 
 			Thread.sleep(3000);

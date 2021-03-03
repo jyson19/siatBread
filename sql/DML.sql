@@ -31,6 +31,7 @@ START WITH 1
 INCREMENT BY 1 
 NOCYCLE NOCACHE;
 
+/*
 -- bread 데이터 (테스트 쿼리)
 insert into bread values(seq_bread.NEXTVAL, '테스트빵1', 5, 1000);
 insert into bread values(seq_bread.NEXTVAL, '테스트빵2', 4, 2000);
@@ -51,7 +52,7 @@ INSERT INTO stock_in(stock_id, bread_id, prod_date, exp_date, quantity, out_date
     SELECT seq_stock_in.NEXTVAL, 4, '2021-02-25', exp_date+to_date('2021-02-25'), 40, '', 1  from bread where bread_id=4;
 INSERT INTO stock_in(stock_id, bread_id, prod_date, exp_date, quantity, out_date, category)
     SELECT seq_stock_in.NEXTVAL, 5, '2021-02-26', exp_date+to_date('2021-02-26'), 50, '', 1  from bread where bread_id=5;
-   
+   */
 
    
    

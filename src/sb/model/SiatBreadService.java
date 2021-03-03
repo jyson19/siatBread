@@ -59,16 +59,7 @@ public class SiatBreadService {
 
 	// 제품 키워드 검색
 	public ArrayList<BreadDTO> getBreadKeyword(String keyword) throws SQLException {
-		try {
-			if (BreadDAO.getBreadKeyword(keyword).size() != 0) {
-				return BreadDAO.getBreadKeyword(keyword);
-			} else {
-				throw new CustomException("해당 제품이 없거나 잘못된 입력 값입니다.");
-			}
-		} catch (CustomException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return BreadDAO.getBreadKeyword(keyword);
 	}
 
 	// ID로 제품 검색
@@ -106,8 +97,11 @@ public class SiatBreadService {
 
 	// 빵 제작(BreadDTO -> StockIn)
 	public boolean fromStockin(String breadName) throws SQLException {
-//		getBreadKeyword(breadName);
-		return StockInDAO.breadCreate(getBreadKeyword(breadName));
+		if (getBreadKeyword(breadName).size() != 0) {
+			return StockInDAO.breadCreate(getBreadKeyword(breadName));
+		} else {
+			return false;
+		}
 	}
 
 	// 빵 폐기처리(StockIn -> StockOut, 3)
@@ -180,10 +174,4 @@ public class SiatBreadService {
 	public BreadDTO getBreadName(int breadId) throws SQLException {
 		return BreadDAO.getBreadId(breadId);
 	}
-
-	// 트랜잭션 처리
-//	public void test() {
-//		getBreadAll();
-//		newBread();
-//	}
 }

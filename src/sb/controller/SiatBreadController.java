@@ -59,6 +59,8 @@ public class SiatBreadController {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -94,11 +96,13 @@ public class SiatBreadController {
 	// 빵 제작(BreadDTO -> StockIn)
 	public void createBread(String breadName) {
 		try {
-			service.fromStockin(breadName);
-			SuccessView.result("\n뜨끈~하고 든든~한 신선한 빵이 나왔습니다!\n");
+			if (service.fromStockin(breadName) == true) {
+				SuccessView.result("\n뜨끈~하고 든든~한 신선한 빵이 나왔습니다!\n");
+			} else {
+				FailView.failMessage("\n빵 제작에 실패하였습니다.  존재하지 않는 빵이군요. \n해당 비용은 추후 청구하도로..ㄱ..\n");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			FailView.failMessage("\n빵 제작에 실패하였습니다. 해당 비용은 추후 청구하도로..ㄱ..\n");
 		}
 	}
 
